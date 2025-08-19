@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proposta Informal de Compra de Imóvel</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2em;
+      background: #f9f9f9;
+    }
+
+     form > label,
+     form > input,
+     form > textarea,
+     form > small {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 600px;
+    }
+
+    img.logo {
+      display: block;
+      max-width: 200px;
+      margin: 0 auto 1em auto;
+    }
+
+    input, textarea {
+      width: 100%;
+      margin: 10px 0 4px;
+      padding: 0.8em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1.2em;
+    }
+
+    label {
+      margin-top: 1em;
+      display: block;
+      font-weight: bold;
+    }
+
+    small {
+      color: gray;
+      display: block;
+      margin-bottom: 1em;
+    }
+
+    button {
+      background-color: #25D366;
+      color: white;
+      padding: 1em;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      margin-top: 1em;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1ebe5d;
+    }
+
+    .pdf-btn {
+      background-color: #007BFF;
+      margin-left: 10px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1em;
+    }
+
+    form h2 {
+      margin-bottom: 1.5em;
+    }
+
+    .proposta-termos {
+  background: white;
+  border: 1px solid #ccc;
+  padding: 1.5em;
+  margin-top: 2em;
+  border-radius: 10px;
+  font-family: 'Segoe UI', sans-serif;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.proposta-termos h3, .proposta-termos h4 {
+  text-align: center;
+  margin-bottom: 0.5em;
+  text-decoration: underline;
+}
+
+.proposta-termos ol {
+  padding-left: 1.2em;
+}
+
+.proposta-termos li {
+  margin-bottom: 0.8em;
+  line-height: 1.5;
+}
+
+.proposta-termos ul {
+  padding-left: 1.2em;
+  list-style-type: disc;
+  margin-top: 0.5em;
+}
+
+
+    
+  </style>
+</head>
+<body>
+
+  <form id="propostaForm">
+    <img src="logo.png" alt="Logo" class="logo">
+    <h2>📄 Proposta Informal de Compra de Imóvel</h2>
+
+    <label>Nome Completo:</label>
+    <input type="text" id="nome" required>
+
+    <label>Telefone / WhatsApp:</label>
+    <input type="text" id="telefone" required>
+
+    <label>Email (opcional):</label>
+    <input type="email" id="email">
+
+    <label>Descrição do Imóvel:</label>
+    <textarea id="descricao" required></textarea>
+    <small>(Ex: Apartamento T4, Prédio Azul, 5º Andar)</small>
+
+    <label>Localização do Imóvel:</label>
+    <input type="text" id="localizacao" required>
+    <small>(Ex: Rua da Liberdade, Benfica, Luanda)</small>
+
+    <label>Valor da Proposta (Dólares Americanos US$):</label>
+    <input type="text" id="valor" oninput="formatarMoeda(this)" required>
+
+    <label>Condições (opcional):</label>
+    <textarea id="condicoes"></textarea>
+
+    <div style="display:flex; justify-content:center; flex-wrap:wrap;">
+      <button type="button" onclick="enviarWhatsApp()">📲 Enviar via WhatsApp</button>
+      <button type="button" class="pdf-btn" onclick="salvarPDF()">💾 Salvar em PDF</button>
+    </div>
+  </form>
+
+  <hr style="margin:2em 0;">
+  <h3>📄 Pré-visualização da Proposta:</h3>
+  <pre id="preview" style="white-space: pre-wrap; background:#f2f2f2; padding:1em; border-radius:6px; font-family: 'Courier New', monospace;"></pre>
+
+
+
+<div class="proposta-termos">
+    <h3>Proposta Informal de Compra e Venda</h3>
+    <h4>Termos e Condições</h4>
+    <ol>
+      <li><strong>Sem obrigação legal:</strong> Esta proposta é informal e não vinculativa.</li>
+      <li><strong>Finalidade:</strong> Permite ao proprietário avaliar o nível de interesse e seriedade de potenciais compradores.</li>
+      <li><strong>Conteúdo mínimo:</strong>
+        <ul>
+          <li><u>Valor Proposto</u></li>
+          <li>Condições principais (ex: forma de pagamento, data prevista para escritura)</li>
+          <li>Nome e contacto do proponente</li>
+        </ul>
+      </li>
+      <li><strong>Atenção:</strong> Propostas vagas, genéricas ou sem intenção clara não serão consideradas.</li>
+      <li><strong>Envio:</strong> Pode preencher o modelo digitalmente e enviar por WhatsApp. Também aceitamos uma foto legível do modelo preenchido à mão.</li>
+      <li><strong>Seleção:</strong> O proprietário reserva-se o direito de não responder a propostas que não reflitam uma avaliação séria e fundamentada.</li>
+    </ol>
+  </div>
+
+
+
+
+
+  
+  <p style="text-align:center; margin-top:2em;">
+    <a href="index.html">🔙 Voltar à Página Principal</a>
+  </p>
+
+  <script>
+    function montarMensagem(atualizarPreview = true) {
+      const nome = document.getElementById('nome').value.trim();
+      const telefone = document.getElementById('telefone').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const descricao = document.getElementById('descricao').value.trim();
+      const localizacao = document.getElementById('localizacao').value.trim();
+      const valor = document.getElementById('valor').value.trim();
+      const condicoes = document.getElementById('condicoes').value.trim();
+      const hoje = new Date().toLocaleDateString('pt-BR');
+
+      const mensagem = `PROPOSTA INFORMAL DE COMPRA DE IMÓVEL
+
+Eu, ${nome}, venho por este meio apresentar uma proposta de compra para o imóvel situado em:
+
+Imóvel: ${descricao}
+Localização: ${localizacao}
+
+Valor da Proposta: US$ ${valor}
+(O valor inclui a comissão da agência)
+
+Condições: ${condicoes || "Nenhuma"}
+
+Tenho consciência de que esta é uma proposta não vinculativa e que está sujeita à confirmação do proprietário. Em caso de aceitação, será celebrado um contrato formal de compra e venda.
+
+Assinatura: ${nome}
+Data: ${hoje}
+Contacto: ${telefone}
+${email ? "Email: " + email : ""}`;
+
+      if (atualizarPreview) {
+        document.getElementById('preview').textContent = mensagem;
+      }
+
+      return mensagem;
+    }
+
+    function enviarWhatsApp() {
+      const mensagem = montarMensagem();
+      const telefoneDestino = '244912345678';
+      const url = `https://wa.me/${telefoneDestino}?text=${encodeURIComponent(mensagem)}`;
+      window.open(url, '_blank');
+    }
+
+    function salvarPDF() {
+      const mensagem = montarMensagem();
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const linhas = mensagem.split('\n');
+      let y = 20;
+
+      doc.setFont("Helvetica");
+      doc.setFontSize(12);
+
+      linhas.forEach((linha) => {
+        const linhasQuebradas = doc.splitTextToSize(linha, 180);
+        linhasQuebradas.forEach((l) => {
+          doc.text(l, 10, y);
+          y += 8;
+          if (y > 280) {
+            doc.addPage();
+            y = 20;
+          }
+        });
+      });
+
+      doc.save("Proposta-de-Compra.pdf");
+    }
+
+    function formatarMoeda(campo) {
+      let valor = campo.value.replace(/\D/g, '');
+      valor = (parseFloat(valor) / 100).toFixed(2) + '';
+      valor = valor.replace('.', ',');
+      valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      campo.value = valor;
+    }
+
+    ['nome', 'telefone', 'email', 'descricao', 'localizacao', 'valor', 'condicoes'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => montarMensagem(true));
+    });
+  </script>
+</body>
+</html>
