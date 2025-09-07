@@ -12,48 +12,54 @@ body {
   padding: 0 1em;
   text-align: center;
 }
-/* end of body */ 
-
-
 
 
 
 /* == HERO == */
 .hero {
   position: relative;
-  width: 100vw;                    /* full viewport width */
-  height: 100vh;                   /* full screen height */
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
-
-  margin-left: calc(50% - 50vw);   /* pull it out of the container */
-  margin-right: calc(50% - 50vw);  /* pull it out of the container */
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 }
 
-/* Hero image fills the container */
 .hero-main-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;               /* cover without distortion */
+  object-fit: cover;
   display: block;
 }
 
-/* Content overlay on top of hero image */
 .hero-content {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-
-  background: rgba(255, 255, 255, 0.5); /* translucent box */
-  padding: 1.5em 1em;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 0.2em 0.2em;     /* 1.5em 1em */
   border-radius: 10px;
-
-  max-width: 720px;   /* contain on desktop */
-  width: 90%;         /* responsive on mobile */
-  box-sizing: border-box;
-  color: #222;
+  width: 50%;
+  max-width: 720px;   /* 720px */
 }
+
+@media (min-width: 769px) {
+  .hero {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    height: auto;
+  }
+}
+/* end of HERO */
+
+
+
+
+
+
 
 /* Logo inside hero content */
 .hero-logo {
@@ -100,17 +106,6 @@ body {
 
 
 
-/* HAND BUILDING IMAGE */
-.after-hero-image {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  display: block;
-  margin: 10px auto;
-}
-/* end of HAND BUILDING IMAGE */
-
-
 
 
 
@@ -149,6 +144,21 @@ body {
   background-color: #e0e0e0;
 }
 /* end of navegation */ 
+
+
+
+/* HAND BUILDING IMAGE */
+.after-hero-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 10px auto;
+}
+/* end of HAND BUILDING IMAGE */
+
+
+
 
 
 
